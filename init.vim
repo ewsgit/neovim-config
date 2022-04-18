@@ -155,6 +155,31 @@ set mouse=a
 set termguicolors
 set background=dark " or light if you want light mode
 colorscheme gruvbox
+let g:neoformat_try_node_exe = 1
+
+autocmd BufWritePre,TextChanged,InsertLeave *.js Neoformat
+autocmd BufWritePre,TextChanged,InsertLeave *.ts Neoformat
+autocmd BufWritePre,TextChanged,InsertLeave *.tsx Neoformat
+autocmd BufWritePre,TextChanged,InsertLeave *.jsx Neoformat
+autocmd BufWritePre,TextChanged,InsertLeave *.json Neoformat
+
+lua << EOF
+
+vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics,
+    {
+        underline = true,
+        virtual_text = {
+            spacing = 5,
+            severity_limit = 'Warning',
+        },
+        update_in_insert = true,
+    }
+)
+
+require('nvim-ts-autotag').setup()
+
+EOF
 
 " vim: set foldmethod=marker foldlevel=0:
 
